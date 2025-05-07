@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My Blog</title>
+    <link rel="stylesheet" href="./output.css" />
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <section
+      class="w-md min-h-fit bg-white border-gray-600 rounded-lg shadow-md p-5"
+    >
+      <div class="flex flex-col items-center justify-center gap-2 py-3">
+        <div class="flex items-center justify-center gap-2">
+          <img class="w-10 h-10" src="/assets/blog_icon.png" alt="icon" />
+          <h1 class="text-3xl font-bold font-mono text-violet-700 py-2">
+            MeBlog
+          </h1>
+        </div>
+        <h2 class="text-xl font-semibold">Create a new account</h2>
+      </div>
+      <form action="#" id="registration" class="space-y-4">
+        <div class="flex flex-col">
+          <label
+            for="username"
+            class="text-violet-700 text-xs font-medium py-1.5"
+            >USERNAME</label
+          >
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            class="min-h-8 p-2 border border-gray-300 rounded-lg"
+            required
+          />
+        </div>
+        <div class="flex flex-col">
+          <label for="email" class="text-violet-700 text-xs font-medium py-1.5"
+            >EMAIL</label
+          >
+          <input
+            type="email"
+            name="email"
+            placeholder="email@address.com"
+            class="min-h-8 p-2 border border-gray-300 rounded-lg"
+            required
+          />
+        </div>
+        <div
+          class="text-red-500 text-xs mt-1 error-message"
+          id="email-error"
+        ></div>
+        <div class="flex flex-col relative">
+          <label
+            for="password"
+            class="text-violet-700 text-xs font-medium py-1.5"
+            >PASSWORD</label
+          >
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="••••••••"
+            class="min-h-8 p-2 border border-gray-300 rounded-lg"
+            required
+          />
+          <button 
+          id="password-eye-button"
+          type="button"
+          class="absolute right-3 top-2/3 -translate-y-1/2 cursor-pointer border-none bg-transparent"
+          aria-label="Show password"
+        >
+          <img id="password-closed-eye" src="/assets/closedEye.svg" class="w-5 h-5" alt="Show password">
+          <img id="password-opened-eye" src="/assets/openedEye.svg" class="w-5 h-5 hidden" alt="Hide password">
+        </button>
+          <div
+            class="text-red-500 text-xs mt-1 error-message"
+            id="password-error"
+          ></div>
+        </div>
+        <div class="flex flex-col relative">
+          <label
+            for="passwords"
+            class="text-violet-700 text-xs font-medium py-1.5"
+            >CONFIRM PASSWORD</label
+          >
+          <input
+            id="confirmPassword"
+            type="password"
+            name="confirmPassword"
+            placeholder="••••••••"
+            class="min-h-8 p-2 border border-gray-300 rounded-lg"
+            required
+          />
+          <button 
+          id="confirmPassword-eye-button"
+          type="button"
+          class="absolute right-3 top-2/3 -translate-y-1/2 cursor-pointer border-none bg-transparent"
+          aria-label="Show password"
+        >
+          <img id="confirmPassword-closed-eye" src="/assets/closedEye.svg" class="w-5 h-5" alt="Show password">
+          <img id="confirmPassword-opened-eye" src="/assets/openedEye.svg" class="w-5 h-5 hidden" alt="Hide password">
+        </button>
+          <div
+            class="text-red-500 text-xs mt-1 error-message"
+            id="confirm-error"
+          ></div>
+        </div>
+        <div class="flex justify-center">
+          <button
+            type="submit"
+            class="bg-violet-600 text-white font-medium py-2 px-4 rounded-lg hover:opacity-90 cursor-pointer"
+          >
+            Register
+          </button>
+        </div>
+        <p class="text-sm text-gray-500">
+          Already have an account?
+          <a href="./login.html" class="font-semibold">Log In</a>
+        </p>
+      </form>
+    </section>
+    <script type="module" src="./register.ts"></script>
+  </body>
+</html>
