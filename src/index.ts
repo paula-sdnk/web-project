@@ -10,7 +10,7 @@ import { isAuthenticated } from "./middleware/auth";
 declare module "express-session" {
   interface SessionData {
     user?: {
-      id: number;
+      id: string;
       username: string;
       email: string;
     };

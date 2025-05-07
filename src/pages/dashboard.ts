@@ -3,10 +3,9 @@ const Url = "http://localhost:3000";
 document.addEventListener("DOMContentLoaded", async () => {
   const postsContainer = document.getElementById("posts-container");
   const loadingPostsMessage = document.getElementById("loading-posts-message");
-  const logoutButton = document.getElementById("logout-button-dashboard");
 
   if (!postsContainer) {
-    console.error("Posts container element (#posts-container) not found!");
+    console.error("Posts container element not found!");
     if (loadingPostsMessage)
       loadingPostsMessage.textContent =
         "Error: Page structure for posts is missing.";
@@ -25,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (posts && posts.length > 0) {
         postsContainer.innerHTML = "";
 
-        posts.forEach((post) => {
+        posts.forEach((post: { title: string; content: string }) => {
           const postCard = document.createElement("div");
           postCard.className =
             "bg-white shadow-md rounded-lg p-6 mb-6 hover:shadow-lg transition-shadow duration-300";

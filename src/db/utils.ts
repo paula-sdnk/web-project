@@ -3,15 +3,15 @@ import db from "./config";
 async function initDB() {
   const sql = `
     CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id TEXT PRIMARY KEY,
       username TEXT NOT NULL,
       email TEXT UNIQUE,
       password TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS posts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      userId INTEGER NOT NULL REFERENCES users(id),
+      id TEXT PRIMARY KEY,
+      userId TEXT NOT NULL REFERENCES users(id),
       title TEXT NOT NULL,
       content TEXT NOT NULL,
       isPublished BOOLEAN NOT NULL

@@ -29,6 +29,7 @@ router.post("/register", async (req: Request, res: Response) => {
   );
 
   if (sqliteError) {
+    console.log(sqliteError);
     res.status(500).json({
       message: "Email is a duplicate",
     });
