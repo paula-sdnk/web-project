@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My dashboard</title>
+    <link rel="stylesheet" href="./output.css" />
+  </head>
+  <body class="bg-gray-100 text-gray-800 font-sans">
+    <header class="bg-white shadow-sm">
+      <nav
+        class="container mx-auto px-6 py-3 flex justify-between items-center"
+      >
+        <h1 class="text-2xl font-bold text-violet-700">MeBlog</h1>
+      </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+      <section
+        id="create-post-section"
+        class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md"
+      >
+        <form id="post-form">
+          <div class="mb-5">
+            <div
+              class="max-w-3xl mx-auto mb-6 flex justify-between items-center border-b pb-2"
+            >
+              <h2 class="text-2xl font-semibold text-gray-700">
+                Write a new post:
+              </h2>
+            </div>
+            <label
+              for="post-title"
+              class="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Post Title <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="post-title"
+              name="title"
+              required
+              minlength="3"
+              class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              placeholder="Catchy title for your post"
+            />
+          </div>
+
+          <div class="mb-6">
+            <label
+              for="post-content"
+              class="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Post Content <span class="text-red-500">*</span>
+            </label>
+            <textarea
+              id="post-content"
+              name="content"
+              rows="10"
+              required
+              minlength="10"
+              class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              placeholder="Share your thoughts, ideas, or story..."
+            ></textarea>
+          </div>
+          <div class="flex items-center justify-between mt-6">
+            <div class="flex space-x-4">
+              <button
+                type="submit"
+                id="publish-button"
+                name="submitAction"
+                value="publish"
+                class="bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-5 rounded focus:outline-none focus:shadow-outline transition duration-300 disabled:opacity-50"
+                aria-label="Publish Post"
+              >
+                Publish
+              </button>
+              <button
+                type="submit"
+                id="save-draft-button"
+                name="submitAction"
+                value="draft"
+                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded focus:outline-none focus:shadow-outline transition duration-300 disabled:opacity-50"
+                aria-label="Save Draft"
+              >
+                Save Draft
+              </button>
+            </div>
+
+            <div>
+              <a
+                href="/dashboard.html"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-5 rounded focus:outline-none focus:shadow-outline transition duration-300"
+              >
+                Cancel
+              </a>
+            </div>
+          </div>
+          <div id="create-post-status" class="mt-4 text-sm h-5"></div>
+        </form>
+      </section>
+    </main>
+    <script type="module" src="./create-post.ts"></script>
+  </body>
+</html>

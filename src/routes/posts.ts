@@ -28,13 +28,12 @@ router.get(
 );
 
 router.post(
-  "createPost",
+  "/createPost",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const userId = req.session.user!.id;
 
-    const { title, content } = req.body;
-    const isPublished = req.body.isPublished === true;
+    const { title, content, isPublished } = req.body;
 
     if (!title || !content) {
       return res

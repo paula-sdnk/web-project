@@ -78,10 +78,8 @@ app.use("/users", userRoutes);
 
 app.use("/posts", postRoutes);
 
-// Serve static files from the public/assets directory
 app.use("/assets", express.static(path.join(__dirname, "../public/assets")));
 
-//Handle 404 errors for non-existing files
 app.use((req, res) => {
   res.status(404).send("Not Found");
 });

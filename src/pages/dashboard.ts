@@ -52,10 +52,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           '<p class="text-gray-600">You haven\'t created any blog posts yet. Why not write your first one?</p>';
       }
     } else {
-      let errorMessage =
-        "Could not load your blog posts. Please try again later.";
+      console.error("Failed to fetch posts, Status:", response.status);
+
       if (response.status === 401) {
-        errorMessage = "Please log in to see your posts.";
+        console.log("Unauthorized. Redirecting to login.");
         window.location.href = "/login.html";
         return;
       }
