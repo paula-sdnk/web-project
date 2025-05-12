@@ -12,7 +12,33 @@
       <nav
         class="container mx-auto px-6 py-3 flex justify-between items-center"
       >
-        <h1 class="text-2xl font-bold text-violet-700">MeBlog</h1>
+        <h1 class="text-2xl font-bold font-serif text-violet-700">
+          SelfScribe
+        </h1>
+        <div class="hidden md:flex md:items-center md:space-x-8">
+          <a
+            href="/feed.html"
+            id="nav-link-feed"
+            class="text-gray-600 hover:text-violet-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            aria-current="page"
+          >
+            For You
+          </a>
+          <a
+            href="/dashboard.html"
+            id="nav-link-my-posts"
+            class="text-gray-600 hover:text-violet-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+          >
+            My Posts
+          </a>
+        </div>
+        <a
+          href="./login.html"
+          id="logout-button-dashboard"
+          class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded transition duration-300 text-sm"
+        >
+          Logout
+        </a>
       </nav>
     </header>
 
@@ -63,6 +89,23 @@
               class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Share your thoughts, ideas, or story..."
             ></textarea>
+          </div>
+          <div class="mb-6">
+            <label for="post-attachment" class="block text-gray-700 text-sm font-bold mb-2">
+              Add an image:
+            </label>
+            <input
+              type="file" id="post-attachment" name="attachment"
+              accept="image/png, image/jpeg, image/gif"
+              class="block w-full text-sm text-gray-500
+                     file:mr-4 file:py-2 file:px-4
+                     file:rounded-md file:border-0
+                     file:text-sm file:font-semibold
+                     file:bg-violet-50 file:text-violet-700
+                     hover:file:bg-violet-100"
+            />
+            <p class="text-xs text-gray-500 mt-1">Max file size: 2MB. Allowed types: PNG, JPG, GIF.</p>
+          </div>
           </div>
           <div class="flex items-center justify-between mt-6">
             <div class="flex space-x-4">

@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const postContent = document.querySelector(
     "#post-content"
   ) as HTMLFormElement;
+  const postAttachmentInput = document.getElementById(
+    "post-attachment"
+  ) as HTMLInputElement;
   const publishButton = document.querySelector(
     "#publish-button"
   ) as HTMLFormElement;
@@ -20,8 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
     !postForm ||
     !postTitle ||
     !postContent ||
+    !postAttachmentInput ||
     !publishButton ||
-    !saveDraftButton
+    !saveDraftButton ||
+    !createPostStatus
   ) {
     console.error(
       "Error: One or more form elements are missing from the page."
@@ -37,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!action) {
       console.error("Could not determine submit action (draft or publish).");
+      createPostStatus.textContent = "Action unclear. Please try again.";
       return;
     }
 
@@ -44,9 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const title = postTitle.value.trim();
     const content = postContent.value.trim();
+    const attachmentFile = postAttachmentInput.files
+      ? postAttachmentInput.files[0]
+      : null;
 
     if (!title || !content) {
       console.log("Post's title or content is empty.");
+      createPostStatus.textContent =
+        "Title and content fields cannot be empty.";
       return;
     }
 
@@ -54,21 +65,29 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log(
         "Post's title cannot be less than 3 characters and content cannot be less than 10 charaacters."
       );
+      createPostStatus.textContent =
+        "Title (min 3 chars) and Content (min 10 chars) are required.";
       return;
     }
 
-    const formData = new FormData(postForm);
+    if (attachmentFile && attachmentFile.size > 2 * 1024 * 1024) {
+      if (createPostStatus)
+        createPostStatus.textContent = "File is too large. Max 2MB allowed.";
+      postAttachmentInput.value = "";
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("isPublished", String(isPublished));
+    if (attachmentFile) {
+      formData.append("attachment", attachmentFile, attachmentFile.name);
+    }
+
     try {
-      const response = await fetch(`${Url}/posts/createPost`, {
+      const response = await fetch(`${Url}/posts/create`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: title,
-          content: content,
-          isPublished: isPublished,
-        }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -81,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
           window.location.href = "./dashboard.html";
-        }, 1500);
+        }, 1000);
       } else {
         const errorData = await response.json();
         console.error("Server error response:", errorData);

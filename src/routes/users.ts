@@ -10,7 +10,14 @@ router.post("/register", async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
-    res.status(400).send({ message: "All fields are required!" });
+    res.status(400).json({ message: "All fields are required!" });
+    return;
+  }
+
+  if ((password || "").length < 8) {
+    res
+      .status(400)
+      .json({ message: "Password must be at least 8 characters." });
     return;
   }
 
@@ -19,8 +26,7 @@ router.post("/register", async (req: Request, res: Response) => {
   );
 
   if (hashingError) {
-    console.log("Error while hashing password");
-    res.status(500);
+    res.status(500).json({ message: "Error while hashing password" });
     return;
   }
 
@@ -52,14 +58,14 @@ router.post("/login", async (req: Request, res: Response) => {
 
   if (userError) {
     console.error("Database error fetching user for email:", email, userError);
-    return res
-      .status(500)
-      .send({ message: "Server error. Please try again later." });
+    res.status(500).send({ message: "Server error. Please try again later." });
+    return;
   }
 
   if (!user) {
     console.log("Login attempt: User not found with email:", email);
-    return res.status(401).send({ message: "Invalid credentials" });
+    res.status(401).send({ message: "Invalid credentials" });
+    return;
   }
 
   const { data: isMatch, error: compareError } = await tryCatch(
@@ -71,23 +77,26 @@ router.post("/login", async (req: Request, res: Response) => {
       "Error during the password comparison process:",
       compareError
     );
-    return res
+    res
       .status(500)
       .send({ message: "Server error during authentication process." });
+    return;
   }
 
   if (!isMatch) {
     console.log("Password mismatch for user:", email);
-    return res.status(401).send({ message: "Incorrect password." });
+    res.status(401).send({ message: "Incorrect password." });
+    return;
   }
 
   if (isMatch) {
     req.session.regenerate((err) => {
       if (err) {
         console.error("Session regeneration error:", err);
-        return res
+        res
           .status(500)
           .send({ message: "Login failed. Could not regenerate session." });
+        return;
       }
 
       req.session.user = {

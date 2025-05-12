@@ -1,66 +1,50 @@
+import { tryCatch } from "./lib/lib.ts";
+import { renderPosts } from "./utils/postRenderer.ts";
+
 const Url = "http://localhost:3000";
+
+type PostData = {
+  id: string;
+  title: string;
+  content: string;
+  isPublished?: number;
+  dateCreated?: string;
+  attachmentPath?: string | null;
+  authorUsername: string;
+  likeCount: number;
+  currentUserLiked: number;
+};
 
 document.addEventListener("DOMContentLoaded", async () => {
   const postsContainer = document.getElementById("posts-container");
-  const loadingPostsMessage = document.getElementById("loading-posts-message");
 
-  if (!postsContainer) {
-    console.error("Posts container element not found!");
-    if (loadingPostsMessage)
-      loadingPostsMessage.textContent =
-        "Error: Page structure for posts is missing.";
+  if (!postsContainer) throw Error("postsContainer not found");
+
+  const { data: response, error: fetchError } = await tryCatch(
+    fetch(`${Url}/posts/my`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+  );
+
+  if (fetchError) return;
+
+  if (!response.ok) {
+    console.error("Failed to fetch posts, Status:", response.status);
+    if (response.status === 401) {
+      console.log("Unauthorized. Redirecting to login.");
+      window.location.href = "/login.html";
+    }
     return;
   }
 
-  try {
-    const response = await fetch(`${Url}/posts/getPosts`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+  const posts: PostData[] = await response.json();
+  console.log("Fetched posts:", posts);
 
-    if (response.ok) {
-      const posts = await response.json();
-      console.log("Fetched posts:", posts);
-      if (posts && posts.length > 0) {
-        postsContainer.innerHTML = "";
-
-        posts.forEach((post: { title: string; content: string }) => {
-          const postCard = document.createElement("div");
-          postCard.className =
-            "bg-white shadow-md rounded-lg p-6 mb-6 hover:shadow-lg transition-shadow duration-300";
-
-          const titleElement = document.createElement("h3");
-          titleElement.className = "text-xl font-semibold text-violet-700 mb-2";
-          titleElement.textContent = post.title;
-
-          const contentElement = document.createElement("p");
-          contentElement.className = "text-gray-700 mb-3";
-
-          const snippetLength = 200;
-          contentElement.textContent =
-            post.content.length > snippetLength
-              ? post.content.substring(0, snippetLength) + "..."
-              : post.content;
-
-          postCard.appendChild(titleElement);
-          postCard.appendChild(contentElement);
-
-          postsContainer.appendChild(postCard);
-        });
-      } else {
-        postsContainer.innerHTML =
-          '<p class="text-gray-600">You haven\'t created any blog posts yet. Why not write your first one?</p>';
-      }
-    } else {
-      console.error("Failed to fetch posts, Status:", response.status);
-
-      if (response.status === 401) {
-        console.log("Unauthorized. Redirecting to login.");
-        window.location.href = "/login.html";
-        return;
-      }
-    }
-  } catch (error) {
-    console.error("Error fetching blog posts (network or other):", error);
+  if (posts) {
+    renderPosts(posts, postsContainer);
+  } else {
+    postsContainer.innerHTML =
+      '<p class="text-gray-600">Unable to load posts. Please try again later.</p>';
   }
 });

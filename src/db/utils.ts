@@ -6,7 +6,8 @@ async function initDB() {
       id TEXT PRIMARY KEY,
       username TEXT NOT NULL,
       email TEXT UNIQUE,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      isAdmin INTEGER NOT NULL DEFAULT 0
     );
 
     CREATE TABLE IF NOT EXISTS posts (
@@ -14,7 +15,28 @@ async function initDB() {
       userId TEXT NOT NULL REFERENCES users(id),
       title TEXT NOT NULL,
       content TEXT NOT NULL,
-      isPublished BOOLEAN NOT NULL
+      isPublished INTEGER NOT NULL,
+      dateCreated TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      attachmentPath TEXT NULL,
+      FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS likes (
+      userId TEXT NOT NULL,
+      postId TEXT NOT NULL,
+      PRIMARY KEY (userId, postId),
+      FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS comments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId TEXT NOT NULL,
+      postId TEXT NOT NULL,
+      content TEXT NOT NULL,
+      createdAt TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE
     );
   `;
 

@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import initDB from "./db/utils";
 import userRoutes from "./routes/users";
 import postRoutes from "./routes/posts";
+import likeRoutes from "./routes/likes";
 import { isAuthenticated } from "./middleware/auth";
 
 declare module "express-session" {
@@ -77,6 +78,10 @@ app.use((req, res, next) => {
 app.use("/users", userRoutes);
 
 app.use("/posts", postRoutes);
+
+app.use("/likes", likeRoutes);
+
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/assets", express.static(path.join(__dirname, "../public/assets")));
 
