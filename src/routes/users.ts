@@ -1,9 +1,29 @@
 import { Router, type Request, type Response } from "express";
 import bcrypt from "bcrypt";
-import { createUser, getUserByEmail } from "../db/handlers/users";
+import { createUser, getUserByEmail, getUserById } from "../db/handlers/users";
 import { tryCatch } from "../lib/lib";
 
 const router: Router = Router();
+
+router.get("/me", async (req: Request, res: Response) => {
+  const userId = req.session.user?.id;
+  if (!userId) {
+    res.status(401).json({ message: "User not authenticated properly." });
+    return;
+  }
+
+  const { data: user, error: userError } = await tryCatch(getUserById(userId));
+  if (!user || userError) {
+    res.status(500).json({ message: "Error fetching user data." });
+    return;
+  }
+
+  res.status(200).json({
+    id: user.id,
+    email: user.email,
+    isAdmin: user.isAdmin === 1, // Convert to a boolean
+  });
+});
 
 router.post("/register", async (req: Request, res: Response) => {
   console.log(req.body);

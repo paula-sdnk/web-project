@@ -13,6 +13,8 @@ type PostData = {
   authorUsername: string;
   likeCount: number;
   currentUserLiked: number;
+  commentCount: number;
+  canDelete: boolean;
 };
 
 document.addEventListener("DOMContentLoaded", async () => {

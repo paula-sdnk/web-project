@@ -17,4 +17,5 @@ export type BlogPost = {
   authorUsername: string;
   likeCount: number;
   currentUserLiked: number;
+  commentCount: number;
 };

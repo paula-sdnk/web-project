@@ -3,6 +3,8 @@ import { handleLikeToggle } from "./handleLikeToggle.ts";
 
 const Url = "http://localhost:3000";
 const LIKE_ICON = "/assets/heart.svg";
+const COMMENT_ICON_URL = "/assets/comment.png";
+const DOTS_ICON_URL = "/assets/dots_icon.png";
 
 export type PostData = {
   id: string;
@@ -14,7 +16,31 @@ export type PostData = {
   authorUsername: string;
   likeCount: number;
   currentUserLiked: number;
+  commentCount: number;
+  canDelete: boolean;
 };
+
+// async function fetchUser() {
+//   const { data: response, error: fetchError } = await tryCatch(
+//     fetch(`${Url}/users/me`, {
+//       method: "GET",
+//       headers: { "Content-Type": "application/json" },
+//     })
+//   );
+
+//   if (fetchError) return;
+
+//   if (!response.ok) {
+//     console.error("Failed to fetch user, Status:", response.status);
+//     if (response.status === 401) {
+//       console.log("Unauthorized. Redirecting to login.");
+//       window.location.href = "/login.html";
+//     }
+//     return;
+//   }
+
+//   return (await response.json()) as { userId: string; isAdmin: number };
+// }
 
 export async function fetchPosts() {
   const { data: response, error: fetchError } = await tryCatch(
@@ -49,7 +75,7 @@ export const createLikeButton = async (
 
   // Like section
   const likeSection = document.createElement("div");
-  likeSection.className = "flex items-center mt-4 space-x-2";
+  likeSection.className = "flex items-center mt-4 space-x-1";
 
   // Like button
   const likeButton = document.createElement("button");
@@ -86,6 +112,61 @@ export const createLikeButton = async (
   return likeSection;
 };
 
+async function deletePostOnServer(postId: string) {
+  const { data: response, error: fetchError } = await tryCatch(
+    fetch(`${Url}/posts/${postId}`, {
+      method: "DELETE",
+    })
+  );
+
+  if (fetchError) {
+    console.error("Error deleting post:", fetchError);
+    return false;
+  }
+
+  if (!response.ok) {
+    console.error(`Failed to delete post: ${response.status}`);
+    if (response.status === 403) {
+      alert("You are not authorized to delete this post.");
+    } else if (response.status === 404) {
+      alert("Post not found.");
+    }
+    try {
+      const errorData = await response.json();
+      console.error("Backend error message:", errorData.message);
+      alert(errorData.message);
+    } catch (e) {
+      alert("Failed to delete post.");
+    }
+
+    return false;
+  }
+
+  return true;
+}
+
+async function handleDeletePostButtonClick(
+  postElement: HTMLElement,
+  postId: string,
+  deleteButton: HTMLButtonElement
+) {
+  const isConfirmed = confirm("Are you sure you want to delete this post?");
+
+  if (isConfirmed) {
+    deleteButton.disabled = true;
+    deleteButton.textContent = "Deleting...";
+
+    const success = await deletePostOnServer(postId);
+
+    if (success) {
+      postElement.remove();
+    } else {
+      deleteButton.disabled = false;
+      deleteButton.textContent = "Delete";
+    }
+  }
+}
+
 export async function renderPosts(posts: PostData[], container: HTMLElement) {
   // Clear container
   container.innerHTML = "";
@@ -99,7 +180,7 @@ export async function renderPosts(posts: PostData[], container: HTMLElement) {
   for (const post of posts) {
     const postCard = document.createElement("div");
     postCard.className =
-      "bg-white shadow-md rounded-lg p-6 mb-6 hover:shadow-lg transition-shadow duration-300";
+      "bg-white shadow-md rounded-lg p-6 mb-6 hover:shadow-lg transition-shadow duration-300 relative";
     postCard.dataset.postId = post.id;
 
     // Author element
@@ -107,6 +188,62 @@ export async function renderPosts(posts: PostData[], container: HTMLElement) {
     authorElement.className = "text-sm text-gray-500 mb-1 italic pb-2";
     authorElement.textContent = `Author: ${post.authorUsername}`;
     postCard.appendChild(authorElement);
+
+    // Action menu
+    const canShowActionMenu = post.canDelete;
+
+    if (canShowActionMenu) {
+      // Only create the action menu if there are potential actions
+      const actionMenuContainer = document.createElement("div");
+      actionMenuContainer.className = "absolute top-4 right-4 z-10";
+
+      const dotsButton = document.createElement("button");
+      dotsButton.className =
+        "text-gray-500 hover:text-gray-700 focus:outline-none p-1 rounded-full";
+      dotsButton.title = "More Actions";
+
+      const dotsIconImg = document.createElement("img");
+      dotsIconImg.className = "h-5 w-5";
+      dotsIconImg.src = DOTS_ICON_URL;
+      dotsIconImg.alt = "More actions icon";
+      dotsButton.appendChild(dotsIconImg);
+
+      const actionDropdown = document.createElement("div");
+      actionDropdown.className =
+        "hidden absolute right-0 mt-2 w-36 origin-top-right bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none";
+
+      dotsButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        actionDropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!actionMenuContainer.contains(event.target as Node)) {
+          actionDropdown.classList.add("hidden");
+        }
+      });
+
+      if (post.canDelete) {
+        const deleteButton = document.createElement("button");
+        deleteButton.className =
+          "block w-full text-left px-2 py-2 text-sm text-red-700 hover:bg-gray-100";
+        deleteButton.textContent = "Delete";
+        deleteButton.title = "Delete Post";
+
+        deleteButton.addEventListener("click", async () => {
+          actionDropdown.classList.add("hidden");
+          await handleDeletePostButtonClick(postCard, post.id, deleteButton);
+        });
+
+        actionDropdown.appendChild(deleteButton);
+      }
+
+      if (actionDropdown.hasChildNodes()) {
+        actionMenuContainer.appendChild(dotsButton);
+        actionMenuContainer.appendChild(actionDropdown);
+        postCard.appendChild(actionMenuContainer);
+      }
+    }
 
     // Title element
     const titleElement = document.createElement("h3");
@@ -152,7 +289,11 @@ export async function renderPosts(posts: PostData[], container: HTMLElement) {
       postCard.appendChild(imageElement);
     }
 
-    postCard.appendChild(
+    const engagementSection = document.createElement("div");
+    engagementSection.className = "flex items-center space-x-4";
+
+    // Likes element
+    engagementSection.appendChild(
       await createLikeButton(
         post.id,
         post.currentUserLiked == 1,
@@ -160,6 +301,33 @@ export async function renderPosts(posts: PostData[], container: HTMLElement) {
       )
     );
 
+    // Comments element
+    const commentSection = document.createElement("div");
+    commentSection.className = "flex items-center mt-4 space-x-1";
+
+    const commentButtonLink = document.createElement("a");
+    commentButtonLink.href = `/view-post.html?id=${post.id}`;
+    commentButtonLink.className =
+      "flex items-center focus:outline-none p-1 rounded-full hover:bg-gray-200 transition duration-150";
+
+    const commentIconImg = document.createElement("img");
+    commentIconImg.className = "h-5 w-5";
+    commentIconImg.src = COMMENT_ICON_URL;
+    commentIconImg.alt = "View comments";
+
+    commentButtonLink.appendChild(commentIconImg);
+
+    commentSection.appendChild(commentButtonLink);
+
+    const commentCountSpan = document.createElement("span");
+    commentCountSpan.className = "comment-count-display text-sm text-gray-600";
+    commentCountSpan.textContent = `${post.commentCount || 0}`;
+    commentSection.appendChild(commentCountSpan);
+
+    engagementSection.appendChild(commentSection);
+    postCard.appendChild(engagementSection);
+
+    // Meta info
     const metaInfo = document.createElement("div");
     metaInfo.className = "text-xs text-gray-500 mt-3 border-t pt-2";
     if (post.dateCreated) {

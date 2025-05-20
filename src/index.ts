@@ -6,6 +6,7 @@ import initDB from "./db/utils";
 import userRoutes from "./routes/users";
 import postRoutes from "./routes/posts";
 import likeRoutes from "./routes/likes";
+import commentRoutes from "./routes/comments";
 import { isAuthenticated } from "./middleware/auth";
 
 declare module "express-session" {
@@ -80,6 +81,8 @@ app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
 app.use("/likes", likeRoutes);
+
+app.use("/comments", commentRoutes);
 
 app.use(express.static(path.join(__dirname, "../public")));
 

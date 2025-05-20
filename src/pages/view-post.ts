@@ -1,8 +1,9 @@
 const Url = "http://localhost:3000";
 import { handleLikeToggle } from "./utils/handleLikeToggle.ts";
 import { createLikeButton } from "./utils/postRenderer.ts";
+import { createCommentSection } from "./utils/handleComments.ts";
 
-const LIKE_ICON = "/assets/heart.svg";
+const COMMENT_ICON_URL = "/assets/comment.png";
 
 interface PostData {
   id: string;
@@ -15,6 +16,7 @@ interface PostData {
   authorUsername: string;
   likeCount: number;
   currentUserLiked: number;
+  commentCount: number;
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -104,13 +106,43 @@ document.addEventListener("DOMContentLoaded", async () => {
         postContainer.appendChild(imageElement);
       }
 
-      postContainer.appendChild(
+      const engagementSection = document.createElement("div");
+      engagementSection.className = "flex items-center space-x-4";
+
+      // Likes element
+      engagementSection.appendChild(
         await createLikeButton(
           post.id,
           post.currentUserLiked == 1,
           post.likeCount
         )
       );
+
+      // Comments element
+      const commentCounter = document.createElement("div");
+      commentCounter.className = "flex items-center mt-4 space-x-1";
+
+      const commentButtonLink = document.createElement("a");
+      commentButtonLink.className =
+        "flex items-center focus:outline-none p-1 rounded-full transition duration-150";
+
+      const commentIconImg = document.createElement("img");
+      commentIconImg.className = "h-5 w-5";
+      commentIconImg.src = COMMENT_ICON_URL;
+      commentIconImg.alt = "View comments";
+
+      commentButtonLink.appendChild(commentIconImg);
+
+      commentCounter.appendChild(commentButtonLink);
+
+      const commentCountSpan = document.createElement("span");
+      commentCountSpan.className =
+        "comment-count-display text-sm text-gray-600";
+      commentCountSpan.textContent = `${post.commentCount || 0}`;
+      commentCounter.appendChild(commentCountSpan);
+
+      engagementSection.appendChild(commentCounter);
+      postContainer.appendChild(engagementSection);
 
       // Meta Info (Date and Status)
       const metaInfo = document.createElement("div");
@@ -137,6 +169,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         metaInfo.appendChild(statusElement);
       }
       postContainer.appendChild(metaInfo);
+
+      const commentsSection = createCommentSection(postId);
+      commentsSection.id = "comments-section";
+
+      if (postContainer.parentNode) {
+        postContainer.parentNode.insertBefore(
+          commentsSection,
+          postContainer.nextSibling
+        );
+      } else {
+        postContainer.appendChild(commentsSection);
+      }
     } else {
       let errorMessage = "Could not load the post.";
       if (response.status === 404) {
