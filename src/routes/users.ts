@@ -5,27 +5,6 @@ import { tryCatch } from "../lib/lib";
 
 const router: Router = Router();
 
-// Is it used anywhere?
-router.get("/me", async (req: Request, res: Response) => {
-  const userId = req.session.user?.id;
-  if (!userId) {
-    res.status(401).json({ message: "User not authenticated properly." });
-    return;
-  }
-
-  const { data: user, error: userError } = await tryCatch(getUserById(userId));
-  if (!user || userError) {
-    res.status(500).json({ message: "Error fetching user data." });
-    return;
-  }
-
-  res.status(200).json({
-    id: user.id,
-    email: user.email,
-    isAdmin: user.isAdmin === 1,
-  });
-});
-
 router.post("/register", async (req: Request, res: Response) => {
   console.log(req.body);
   const { username, email, password } = req.body;
@@ -69,8 +48,6 @@ router.post("/register", async (req: Request, res: Response) => {
 });
 
 router.post("/login", async (req: Request, res: Response) => {
-  console.log(req.sessionID);
-  console.log(req.body);
   const { email, password } = req.body;
 
   const { data: user, error: userError } = await tryCatch(
@@ -125,8 +102,6 @@ router.post("/login", async (req: Request, res: Response) => {
         username: user.username,
         email: user.email,
       };
-      console.log("New Session ID:", req.sessionID);
-      console.log("User in session:", req.session.user);
       res
         .status(200)
         .send({ message: "Login successful!", user: req.session.user });
