@@ -199,7 +199,7 @@ export function renderComments(
 export function createCommentSection(postId: string) {
   const commentsSection = document.createElement("section");
   commentsSection.className =
-    "max-w-3xl mx-auto bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-xl border-t border-gray-200";
+    "max-w-3xl mx-auto bg-white p-6 sm:p-8 md:p-10 rounded-lg shadow-xl border-t border-gray-200 mb-6";
 
   // Comments header
   const commentsHeader = document.createElement("h2");
@@ -233,13 +233,11 @@ export function createCommentSection(postId: string) {
   commentsList.className = "space-y-4";
   commentsList.id = "comments-list";
 
-  // Loading message for comments
   const loadingComments = document.createElement("p");
   loadingComments.className = "text-gray-500 text-center py-4";
   loadingComments.textContent = "Loading comments...";
   commentsList.appendChild(loadingComments);
 
-  // Add event listener for form submission
   commentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 

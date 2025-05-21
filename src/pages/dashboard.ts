@@ -7,8 +7,8 @@ type PostData = {
   id: string;
   title: string;
   content: string;
-  isPublished?: number;
-  dateCreated?: string;
+  isPublished: number;
+  dateCreated: string;
   attachmentPath?: string | null;
   authorUsername: string;
   likeCount: number;

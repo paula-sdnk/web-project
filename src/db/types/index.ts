@@ -18,4 +18,5 @@ export type BlogPost = {
   likeCount: number;
   currentUserLiked: number;
   commentCount: number;
+  canDelete: boolean;
 };

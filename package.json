@@ -14,6 +14,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.8.0",
     "@tailwindcss/vite": "^4.0.14",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",

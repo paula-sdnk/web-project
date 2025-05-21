@@ -5,6 +5,7 @@ import { tryCatch } from "../lib/lib";
 
 const router: Router = Router();
 
+// Is it used anywhere?
 router.get("/me", async (req: Request, res: Response) => {
   const userId = req.session.user?.id;
   if (!userId) {
@@ -21,7 +22,7 @@ router.get("/me", async (req: Request, res: Response) => {
   res.status(200).json({
     id: user.id,
     email: user.email,
-    isAdmin: user.isAdmin === 1, // Convert to a boolean
+    isAdmin: user.isAdmin === 1,
   });
 });
 

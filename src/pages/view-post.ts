@@ -1,7 +1,7 @@
 const Url = "http://localhost:3000";
-import { handleLikeToggle } from "./utils/handleLikeToggle.ts";
 import { createLikeButton } from "./utils/postRenderer.ts";
 import { createCommentSection } from "./utils/handleComments.ts";
+import { handleLikeToggle } from "./utils/handleLikeToggle.ts";
 
 const COMMENT_ICON_URL = "/assets/comment.png";
 
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (post.authorUsername) {
         const authorElement = document.createElement("p");
         authorElement.className = "text-md text-gray-600 mb-2 italic";
-        authorElement.textContent = `By: ${post.authorUsername}`;
+        authorElement.textContent = `Author: ${post.authorUsername}`;
         postContainer.appendChild(authorElement);
       }
 
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const errorData = await response.json();
           if (errorData && errorData.message) errorMessage = errorData.message;
         } catch (e) {
-          console.warn(
+          console.error(
             "Could not parse server error response as JSON. Status:",
             response.status
           );

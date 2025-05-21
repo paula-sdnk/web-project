@@ -3,10 +3,8 @@ import { tryCatch } from "../lib/lib.ts";
 const Url = "http://localhost:3000";
 const LIKE_ICON = "/assets/heart.svg";
 
-// Lock mechanism to track ongoing requests
 const requestLocks = new Set<string>();
 
-// Helper function to toggle button appearance and like count
 function toggleButtonState(
   button: HTMLButtonElement,
   buttonIcon: HTMLDivElement,
@@ -25,12 +23,10 @@ function toggleButtonState(
 export async function handleLikeToggle(event: MouseEvent) {
   const button = event.currentTarget as HTMLButtonElement;
   const postId = button.dataset.postId;
-  const currentlyLiked = button.dataset.liked === "true"; // Check current state
+  const currentlyLiked = button.dataset.liked === "true";
 
-  // Get the image element inside the button
   const likeIcon = button.querySelector("div[data-icon]");
 
-  // Find the like count span relative to the button
   const postCard = button.closest("div[data-post-id]");
 
   const likeCountSpan = postCard?.querySelector(

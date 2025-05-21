@@ -10,8 +10,8 @@ export type PostData = {
   id: string;
   title: string;
   content: string;
-  isPublished?: number;
-  dateCreated?: string;
+  isPublished: number;
+  dateCreated: string;
   attachmentPath?: string | null;
   authorUsername: string;
   likeCount: number;
@@ -19,52 +19,6 @@ export type PostData = {
   commentCount: number;
   canDelete: boolean;
 };
-
-// async function fetchUser() {
-//   const { data: response, error: fetchError } = await tryCatch(
-//     fetch(`${Url}/users/me`, {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     })
-//   );
-
-//   if (fetchError) return;
-
-//   if (!response.ok) {
-//     console.error("Failed to fetch user, Status:", response.status);
-//     if (response.status === 401) {
-//       console.log("Unauthorized. Redirecting to login.");
-//       window.location.href = "/login.html";
-//     }
-//     return;
-//   }
-
-//   return (await response.json()) as { userId: string; isAdmin: number };
-// }
-
-export async function fetchPosts() {
-  const { data: response, error: fetchError } = await tryCatch(
-    fetch(`${Url}/posts`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-  );
-
-  if (fetchError) return;
-
-  if (!response.ok) {
-    console.error("Failed to fetch posts, Status:", response.status);
-    if (response.status === 401) {
-      console.log("Unauthorized. Redirecting to login.");
-      window.location.href = "/login.html";
-    }
-    return;
-  }
-
-  const posts: PostData[] = await response.json();
-  console.log("Fetched posts:", posts);
-  return posts;
-}
 
 export const createLikeButton = async (
   postId: string,
@@ -76,6 +30,7 @@ export const createLikeButton = async (
   // Like section
   const likeSection = document.createElement("div");
   likeSection.className = "flex items-center mt-4 space-x-1";
+  likeSection.dataset.postId = postId;
 
   // Like button
   const likeButton = document.createElement("button");
@@ -168,7 +123,6 @@ async function handleDeletePostButtonClick(
 }
 
 export async function renderPosts(posts: PostData[], container: HTMLElement) {
-  // Clear container
   container.innerHTML = "";
 
   if (!posts || posts.length === 0) {
@@ -190,7 +144,7 @@ export async function renderPosts(posts: PostData[], container: HTMLElement) {
     postCard.appendChild(authorElement);
 
     // Action menu
-    const canShowActionMenu = post.canDelete;
+    const canShowActionMenu = post.canDelete || post.isPublished === 0;
 
     if (canShowActionMenu) {
       // Only create the action menu if there are potential actions
@@ -222,6 +176,20 @@ export async function renderPosts(posts: PostData[], container: HTMLElement) {
           actionDropdown.classList.add("hidden");
         }
       });
+
+      if (post.isPublished === 0) {
+        const editButton = document.createElement("button");
+        editButton.className =
+          "block w-full text-left px-2 py-2 text-sm text-blue-700 hover:bg-gray-100";
+        editButton.textContent = "Edit";
+        editButton.title = "Edit Post";
+
+        editButton.addEventListener("click", () => {
+          actionDropdown.classList.add("hidden");
+          window.location.href = `create-post.html?edit=${post.id}`;
+        });
+        actionDropdown.appendChild(editButton);
+      }
 
       if (post.canDelete) {
         const deleteButton = document.createElement("button");

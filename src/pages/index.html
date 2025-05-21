@@ -4,10 +4,71 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>My Blog</title>
+    <title>SelfScribe - Share Your Story</title>
     <link rel="stylesheet" href="./output.css" />
   </head>
-  <body>
-    <h1>Welcome to the SelfScribe!</h1>
+  <body class="bg-white text-gray-800 font-sans flex flex-col min-h-screen">
+    <header class="border-b border-gray-200">
+      <nav
+        class="container mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <h1 class="text-2xl font-bold font-serif text-violet-600">
+          SelfScribe
+        </h1>
+        <div class="flex items-center space-x-6">
+          <a
+            href="/login.html"
+            class="text-gray-600 hover:text-violet-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+          >
+            Log in
+          </a>
+          <a
+            href="/register.html"
+            class="text-gray-600 hover:text-violet-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+          >
+            Sign up
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container mx-auto px-6 flex-grow flex items-center">
+      <div class="max-w-2xl">
+        <h2
+          class="font-serif text-5xl font-bold text-gray-800 mb-6 leading-tight"
+        >
+          Human stories <span class="text-violet-600">&</span> ideas
+        </h2>
+        <p class="font-serif text-xl text-gray-600 mb-8 leading-relaxed">
+          A place to read, write, and deepen your understanding. Share your
+          thoughts with the world and connect with like-minded individuals.
+        </p>
+        <div>
+          <a
+            href="/login.html"
+            class="inline-block border border-violet-600 text-violet-600 hover:bg-violet-50 font-medium py-2 px-6 rounded-md transition duration-300 text-center"
+          >
+            Start reading
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-12 md:mt-0 md:w-1/2 flex justify-center md:justify-end">
+        <img 
+          src="assets/sketch.jpg" 
+          alt="Abstract illustration" 
+          class="max-w-full h-[800px] w-auto object-contain"
+        />
+      </div>
+    </div>
+    </main>
+
+    <footer class="bg-gray-100 py-4 border-t border-gray-200">
+      <div class="container mx-auto px-6">
+        <p class="text-gray-600 text-sm">
+          © 2025 SelfScribe. All rights reserved.
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

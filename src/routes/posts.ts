@@ -27,8 +27,8 @@ fs.mkdirSync(PUBLIC_UPLOADS_PATH, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // cb: A "callback" function. A note you give back to multer.
-    cb(null, PUBLIC_UPLOADS_PATH); // cb(null, ...): The first argument is for errors.
+    // cb: callback function. A note to give back to multer
+    cb(null, PUBLIC_UPLOADS_PATH); // cb(null, ...): The first argument is for errors
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -258,9 +258,9 @@ router.put("/:postId", isAuthenticated, async (req: Request, res: Response) => {
   }
 
   if (!title || !content || isPublished === undefined) {
-    res
-      .status(400)
-      .json({ message: "Title, content, and published status are required." });
+    res.status(400).json({
+      message: "Title, content and published status are required.",
+    });
     return;
   }
 

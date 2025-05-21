@@ -1,4 +1,5 @@
-import { fetchPosts, renderPosts } from "./utils/postRenderer.ts";
+import { renderPosts } from "./utils/postRenderer.ts";
+import { tryCatch } from "./lib/lib.ts";
 
 const Url = "http://localhost:3000";
 
@@ -7,7 +8,39 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!postsContainer) throw Error("postsContainer not found");
 
-  const posts = await fetchPosts();
+  type PostData = {
+    id: string;
+    title: string;
+    content: string;
+    isPublished: number;
+    dateCreated: string;
+    attachmentPath?: string | null;
+    authorUsername: string;
+    likeCount: number;
+    currentUserLiked: number;
+    commentCount: number;
+    canDelete: boolean;
+  };
+
+  const { data: response, error: fetchError } = await tryCatch(
+    fetch(`${Url}/posts`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+  );
+
+  if (fetchError) return;
+
+  if (!response.ok) {
+    console.error("Failed to fetch posts, Status:", response.status);
+    if (response.status === 401) {
+      console.log("Unauthorized. Redirecting to login.");
+      window.location.href = "/login.html";
+    }
+    return;
+  }
+
+  const posts: PostData[] = await response.json();
 
   if (posts) {
     renderPosts(posts, postsContainer);
