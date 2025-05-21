@@ -252,19 +252,21 @@ router.put("/:postId", isAuthenticated, async (req: Request, res: Response) => {
   const { title, content, isPublished, attachmentPath } = req.body;
   const userId = req.session.user!.id;
 
+  const isPublishedDb: number = req.body.isPublished === "true" ? 1 : 0;
+
   if (!postId) {
     res.status(400).json({ message: "Post ID is required in the URL." });
     return;
   }
 
-  if (!title || !content || isPublished === undefined) {
+  if (!title || !content || isPublishedDb === undefined) {
     res.status(400).json({
       message: "Title, content and published status are required.",
     });
     return;
   }
 
-  if (isNaN(isPublished) || (isPublished !== 0 && isPublished !== 1)) {
+  if (isNaN(isPublishedDb) || (isPublishedDb !== 0 && isPublishedDb !== 1)) {
     res.status(400).json({ message: "Invalid published status." });
     return;
   }

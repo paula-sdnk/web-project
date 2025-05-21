@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Post Content (Full Content)
       const contentElement = document.createElement("div");
       contentElement.className =
-        "prose prose-lg max-w-none text-gray-800 leading-relaxed mt-6";
+        "prose prose-lg max-w-none text-gray-800 leading-relaxed mt-6 whitespace-pre-wrap";
       post.content.split("\n").forEach((paragraphText) => {
         if (paragraphText.trim() !== "") {
           const p = document.createElement("p");

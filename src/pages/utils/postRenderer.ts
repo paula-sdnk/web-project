@@ -225,7 +225,8 @@ export async function renderPosts(posts: PostData[], container: HTMLElement) {
 
     // Content element
     const textContentElement = document.createElement("p");
-    textContentElement.className = "text-gray-700 mb-3 leading-relaxed";
+    textContentElement.className =
+      "text-gray-700 mb-3 leading-relaxed whitespace-pre-wrap";
     const snippetLength = 200;
     const isTruncated = post.content.length > snippetLength;
     textContentElement.textContent = isTruncated

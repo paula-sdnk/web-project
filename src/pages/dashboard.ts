@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const posts: PostData[] = await response.json();
-  console.log("Fetched posts:", posts);
 
   if (posts) {
     renderPosts(posts, postsContainer);

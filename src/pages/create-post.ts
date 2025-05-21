@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     "#create-post-status"
   ) as HTMLFormElement;
 
-  const pageHeading = document.querySelector("h1");
+  const pageHeading = document.querySelector("h2");
 
   if (
     !postForm ||
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    const isPublished = action === "publish" ? 1 : 0;
+    const isPublished = action === "publish";
 
     const title = postTitle.value.trim();
     const content = postContent.value.trim();
