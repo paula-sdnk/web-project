@@ -1,21 +1,8 @@
 import { tryCatch } from "./lib/lib.ts";
 import { renderPosts } from "./utils/postRenderer.ts";
+import { PostData } from "./utils/postRenderer.ts";
 
 const Url = "http://localhost:3000";
-
-type PostData = {
-  id: string;
-  title: string;
-  content: string;
-  isPublished: number;
-  dateCreated: string;
-  attachmentPath?: string | null;
-  authorUsername: string;
-  likeCount: number;
-  currentUserLiked: number;
-  commentCount: number;
-  canDelete: boolean;
-};
 
 document.addEventListener("DOMContentLoaded", async () => {
   const postsContainer = document.getElementById("posts-container");

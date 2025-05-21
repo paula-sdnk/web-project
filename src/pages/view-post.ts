@@ -1,23 +1,9 @@
 const Url = "http://localhost:3000";
 import { createLikeButton } from "./utils/postRenderer.ts";
 import { createCommentSection } from "./utils/handleComments.ts";
-import { handleLikeToggle } from "./utils/handleLikeToggle.ts";
+import { PostData } from "./utils/postRenderer.ts";
 
 const COMMENT_ICON_URL = "/assets/comment.png";
-
-interface PostData {
-  id: string;
-  userId: string;
-  title: string;
-  content: string;
-  isPublished: number;
-  dateCreated: string;
-  attachmentPath?: string | null;
-  authorUsername: string;
-  likeCount: number;
-  currentUserLiked: number;
-  commentCount: number;
-}
 
 document.addEventListener("DOMContentLoaded", async () => {
   const postContainer = document.getElementById(
