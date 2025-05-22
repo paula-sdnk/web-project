@@ -62,7 +62,7 @@ async function main() {
     })
   );
 
-  app.get("/index.html", isAuthenticated, (req, res) => {
+  app.get("/index.html", (req, res) => {
     console.log(
       `Serving index.html to logged-in user: ${req.session.user?.username}`
     );
