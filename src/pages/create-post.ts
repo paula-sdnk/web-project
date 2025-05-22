@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    if (attachmentFile && attachmentFile.size > 2 * 1024 * 1024) {
+    if (attachmentFile && attachmentFile.size > 5 * 1024 * 1024) {
       if (createPostStatus)
         createPostStatus.textContent = "File is too large. Max 5MB allowed.";
       postAttachmentInput.value = "";
