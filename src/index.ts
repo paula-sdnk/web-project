@@ -55,7 +55,7 @@ async function main() {
 
   app.use(
     session({
-      secret: "Paula blog",
+      secret: "webprojectblog",
       cookie: { maxAge: 1800000 }, // 30 minutes
       saveUninitialized: false,
       resave: false,
