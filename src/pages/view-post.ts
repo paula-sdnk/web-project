@@ -1,7 +1,7 @@
 const Url = "http://localhost:3000";
 import { createLikeButton } from "./utils/postRenderer.ts";
 import { createCommentSection } from "./utils/handleComments.ts";
-import { PostData } from "./utils/postRenderer.ts";
+import type { PostData } from "./utils/postRenderer.ts";
 
 const COMMENT_ICON_URL = "/assets/comment.png";
 

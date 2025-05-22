@@ -1,6 +1,6 @@
 import { tryCatch } from "./lib/lib.ts";
 import { renderPosts } from "./utils/postRenderer.ts";
-import { PostData } from "./utils/postRenderer.ts";
+import type { PostData } from "./utils/postRenderer.ts";
 
 const Url = "http://localhost:3000";
 
